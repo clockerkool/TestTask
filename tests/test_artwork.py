@@ -1,10 +1,7 @@
-import re
 import requests
 from configuration import *
-from utils import get_artwork_response, get_department_displayName
 from src.enums.global_enums import GlobalErrorMessages
 from src.pydantic_schemas.artworks import ArtWork
-from src.pydantic_schemas.search_schema import Search
 from src.pydantic_schemas.objects_id import ObjectsIDs
 from src.pydantic_schemas.departments import Departments
 from src.baseclasses.response import Response

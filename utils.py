@@ -12,9 +12,10 @@ def get_artwork_response(artwork_id):
 
 def check_uniqueness_id(list_id: list) -> bool:
     """Получает список с идентификаторами и проверяет, все ли они уникальны"""
-    assert len(set(list_id)) == len(list_id),\
-            f"Идентификаторы не уникальны: {len(set(list_id))} уникальных, {len(list_id)} всего"
+    assert len(set(list_id)) == len(list_id), \
+        f"Идентификаторы не уникальны: {len(set(list_id))} уникальных, {len(list_id)} всего"
     return True
+
 
 def get_department_displayName(data, id):
     """Вовращает атрибут displayName(на данный момент не используется)"""
@@ -24,16 +25,3 @@ def get_department_displayName(data, id):
             return display_name
     else:
         raise AttributeError(f"Отдела с таким ID не существует ({id})")
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -8,6 +8,7 @@ class Measurement(BaseModel):
     elementDescription: str
     elementMeasurements: dict
 
+
 class ArtWork(BaseModel):
     objectID: int
     isHighlight: bool
@@ -43,7 +44,7 @@ class ArtWork(BaseModel):
     objectEndDate: int
     medium: str
     dimensions: str
-    #dimensionsParsed: Optional[float | int] #узнать почему в документации есть, а по факту нет
+    # dimensionsParsed: Optional[float | int] #узнать почему в документации есть, а по факту нет
     measurements: List[Measurement] = []
     creditLine: str
     geographyType: str

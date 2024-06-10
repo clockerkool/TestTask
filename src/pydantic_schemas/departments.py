@@ -6,5 +6,6 @@ class Department(BaseModel):
     departmentId: int
     displayName: str
 
+
 class Departments(BaseModel):
     departments: List[Department] = []
