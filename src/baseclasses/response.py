@@ -18,10 +18,13 @@ class Response:
 
     def assert_status_code(self, status_code):
         """Проверка на корректность HTTP статуса"""
-        if isinstance(status_code, list):
-            assert self.response_status in status_code, self
-        elif self.response_status == 404:
-            raise AssertionError("Страница не найдена - 404")
-        else:
-            assert self.response_status == status_code, self
-        return self
+        try:
+            if isinstance(status_code, list):
+                assert self.response_status in status_code, self
+            elif self.response_status == 404:
+                raise AssertionError("Страница не найдена - 404")
+            else:
+                assert self.response_status == status_code, self
+            return self
+        except ValueError:
+            raise AssertionError("Неизвестный статус код")
