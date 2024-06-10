@@ -10,12 +10,13 @@ def test_search_query():
     """Проверка по запроса с параметром q
     P.S В документации не нашёл по какому атрибуту фильтруется, проверка была по атрибуту title
     """
-    response = requests.get(url=TEST_SEARCH_QUERY_URL)
+    params = {"q": "sunflowers"}
+    response = requests.get(url=TEST_SEARCH_URL, params=params)
     search_result = Response(response)
     search_result.assert_status_code(200)
     search_result.validate(Search)
     try:
-        match = re.search(r"q=(\w+)", TEST_SEARCH_QUERY_URL)
+        match = re.search(r"q=(\w+)", response.url)
         q_value = match.group(1)
         for i in range(len(search_result.response_json.get('objectIDs'))):
             response_test_artwork = get_artwork_response(f"{response.json().get('objectIDs')[i]}")
@@ -28,12 +29,13 @@ def test_search_query():
 
 def test_search_filter():
     """Проверка поиска по параметру isHightlight"""
-    response = requests.get(url=TEST_SEARCH_ISHIGHLIGHT_URL)
+    params = {"q": "sunflowers", "isHighlight": "true"}
+    response = requests.get(url=TEST_SEARCH_URL, params=params)
     search_result = Response(response)
     search_result.assert_status_code(200)
     search_result.validate(Search)
 
-    match = re.search(r"isHighlight=(\w+)", TEST_SEARCH_ISHIGHLIGHT_URL)
+    match = re.search(r"isHighlight=(\w+)", response.url)
     temp_isHighlight = True if match.group(1) == "true" else False
 
     for i in range(0, len(search_result.response_json.get('objectIDs'))):
@@ -44,7 +46,8 @@ def test_search_filter():
 
 def test_search_department_id():
     """Проверка запроса с параметром department_id"""
-    response = requests.get(url=TEST_SEARCH_DEPARTMENTID_URL)
+    params = {"q": "cat", "departmentId": 6 }
+    response = requests.get(url=TEST_SEARCH_URL, params=params)
     search_result = Response(response)
     search_result.assert_status_code(200)
     search_result.validate(Search)
@@ -55,7 +58,8 @@ def test_search_hasImages():
     Проверил атрибут hasImages поиска, однако проверка не пройдена, написал простое исключение-заглушку.
     У конкретного объекта нет этого атрибуса, поэтому решил проверить наличие изображений в целом
     """
-    response = requests.get(url=TEST_SEARCH_HAS_IMAGES_URL)
+    params = {"q": "Auguste Renoir", "hasImages": "true"}
+    response = requests.get(url=TEST_SEARCH_URL, params=params)
     search_result = Response(response)
     search_result.assert_status_code(200)
     search_result.validate(Search)
@@ -78,12 +82,13 @@ def test_search_dates():
     P.S В какой-то момент не приходит страница обекта произведения искусства (код 404)
     решил просто пропускать этот несуществующий объект
     """
-    response = requests.get(url=TEST_SEARCH_DATE_URL)
+    params = {"q":"African", "dateBegin": 1700, "dateEnd": 1800}
+    response = requests.get(url=TEST_SEARCH_URL, params=params)
     search_result = Response(response)
     search_result.assert_status_code(200)
     search_result.validate(Search)
 
-    match = re.search(pattern_date_attr, TEST_SEARCH_DATE_URL)
+    match = re.search(pattern_date_attr, response.url)
     dateBegin = int(match.group(1))
     dateEnd = int(match.group(2))
     for i in range(0, len(search_result.response_json.get('objectIDs'))):
