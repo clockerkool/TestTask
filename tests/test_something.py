@@ -3,6 +3,7 @@ from conf import *
 from src.enums.global_enums import GlobalErrorMessages
 from src.pydantic_schemas.artworks import ArtWork
 from src.pydantic_schemas.search_schema import Search
+from src.pydantic_schemas.objects_id import ObjectsIDs
 from src.baseclasses.response import Response
 
 
@@ -14,10 +15,10 @@ def test_api_request():
 
 def test_objects():
     # описать
-    params = {'metadataDate': '2024-05-29', 'departmentIds': 1}
-    response = requests.get(url='https://collectionapi.metmuseum.org/public/collection/v1/objects', params=params)
-    assert response.status_code == 200, GlobalErrorMessages.WRONG_STATUS_CODE.value
-    response_data = response.json()
+    response = requests.get(url=TEST_OBJECTS_URL)
+    all_artworks = Response(response)
+    all_artworks.assert_status_code(200)
+    all_artworks.validate(ObjectsIDs)
 
 
 def test_artwork():
@@ -32,5 +33,9 @@ def test_search():
     search_result = Response(response)
     search_result.assert_status_code(200)
     search_result.validate(Search)
-    response_test_artwork = requests.get(url=TEST_ARTWORK_URL + f"{response.json().get('objectIDs')[0]}")
-    print(response_test_artwork.json().get('title'))
+
+    # for i in range(1, len(search_result.response_json.get('objectIDs')) + 1):
+    #     response_test_artwork = requests.get(url=TEST_ARTWORK_URL + f"{response.json().get('objectIDs')[i]}")
+    #     title = response_test_artwork.json().get('title').lower()
+    #     assert 'sunflower' in title, "Поиск по ключевому слову возвращает некорректные результаты."
+
